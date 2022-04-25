@@ -20,6 +20,16 @@ message_database = [
         "update_date": datetime(2022, 4, 20, 19, 41, 0),
         "is_viewed": False,
         "media": []
+    },
+    {
+        "id": 3,
+        "chat_id": 2,
+        "text": "Тест",
+        "creation_date": datetime(2022, 4, 20, 19, 40, 0),
+        "is_updated": True,
+        "update_date": datetime(2022, 4, 20, 19, 41, 0),
+        "is_viewed": False,
+        "media": []
     }
 ]
 # media это картиночки, видосики и прочая шляпа

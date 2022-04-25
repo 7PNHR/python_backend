@@ -1,25 +1,8 @@
 from fastapi import APIRouter
 from crud.chat import chat_database, user_chat_database
-from crud.message import message_database
 from schemas.chat import Chat, ChatInDB
 
 router = APIRouter(prefix="/chat")
-
-N = 10
-
-
-@router.get("last/{chat_id}", response_model=ChatInDB)
-async def create_chat(user: Chat):
-    pass
-
-
-'''
-def filter():
-    lastMessages = list(message_database)
-    filter(filter_by_chat_id,message_database)
-    lastMessages.sort(key=lastMessages.)
-    return
-'''
 
 
 @router.get("/{chat_id}")
