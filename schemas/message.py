@@ -8,12 +8,12 @@ class Message(BaseModel):
     is_updated: bool
     update_date: datetime
     is_viewed: bool
-    media: list
-
-
-# media - ссылки на ресурс
+    is_deleted: bool
 
 
 class MessageInDB(Message):
     id: int
     chat_id: int
+
+    class Config:
+        orm_mode = True

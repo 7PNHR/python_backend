@@ -1,23 +1,29 @@
-from datetime import datetime
-from schemas.chat import ChatType
+from sqlalchemy.orm import Session
+from core.db.models import Chat, UserChat
+import schemas.chat as schema
 
 
-chat_database = [
-    {
-        "id": 1,
-        "name": "Чат 1",
-        "creation_date": datetime(2022, 4, 20, 19, 39, 0),
-        "type": ChatType.private
-    }
-]
+def create_chat(db: Session, chat: schema.Chat):
+    chat_db = Chat(**chat.dict())
+    db.add(chat_db)
+    db.commit()
+    return chat_db
 
-user_chat_database = [
-    {
-        "user_id": 1,
-        "chat_id": 1
-    },
-    {
-        "user_id": 2,
-        "chat_id": 1
-    }
-]
+
+def get_chat_by_id(db: Session, chat_id: int):
+    return db.query(Chat).filter(Chat.id == chat_id).one_or_none()
+
+
+def update_chat(db: Session, chat_id: int, name: str):
+    chat_db = db.query(Chat).filter(Chat.id == chat_id).one_or_none()
+    setattr(chat_db, "name", name)
+    db.commit()
+    return chat_db
+
+
+def delete_chat(db: Session, chat_id: int):
+    db.query(UserChat).filter(UserChat.chat_id == chat_id).delete()
+    db.query(Chat).filter(Chat.id == chat_id).delete()
+    db.commit()
+
+

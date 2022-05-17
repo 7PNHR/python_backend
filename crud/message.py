@@ -1,25 +1,28 @@
-from datetime import datetime
+from sqlalchemy.orm import Session
+from core.db.models import Message
+import schemas.message as schema
 
-message_database = [
-    {
-        "id": 1,
-        "chat_id": 1,
-        "text": "Привет",
-        "creation_date": datetime(2022, 4, 20, 19, 39, 0),
-        "is_updated": False,
-        "update_date": None,
-        "is_viewed": False,
-        "media": []
-    },
-    {
-        "id": 2,
-        "chat_id": 1,
-        "text": "Мир!",
-        "creation_date": datetime(2022, 4, 20, 19, 40, 0),
-        "is_updated": True,
-        "update_date": datetime(2022, 4, 20, 19, 41, 0),
-        "is_viewed": False,
-        "media": []
-    }
-]
-# media это картиночки, видосики и прочая шляпа
+
+def create_message(db: Session, chat: schema.Message):
+    message_db = Message(**chat.dict())
+    db.add(message_db)
+    db.commit()
+    return message_db
+
+
+def get_message_by_id(db: Session, message_id: int):
+    return db.query(Message).filter(Message.id == message_id).one_or_none()
+
+
+def update_message(db: Session, message_id: int, message: schema.Message):
+    message_db = db.query(Message).filter(Message.id == message_id).one_or_none()
+    for param, value in message.dict().items():
+        setattr(message_db, param, value)
+    db.commit()
+    return message_db
+
+
+def delete_chat(db: Session, message_id: int):
+    message_db = db.query(Message).filter(Message.id == message_id).one_or_none()
+    setattr(message_db, "is_deleted", True)
+    db.commit()
